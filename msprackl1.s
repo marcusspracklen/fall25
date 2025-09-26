@@ -7,10 +7,11 @@
 
 .text
 main:
-        lui x7, zero
+        addi x7, zero, 0                # zero sum counter
+        lui x8, 0x80000                 # set to smallest possible 32-bit value
 
 loop:
-        la t0, input_promt  # load adress of a string into x5
+        la t0, input_promt  # load adress of a string into t0
 
         sout t0             # display the string whose adress is in t0
         la t0, buffer
@@ -21,11 +22,10 @@ loop:
 
         add x7, x5, x7      # add together the input value with the sum of all previous values
 
-        blt x8, x5, max     # if x5 >= x8 then make it new max
-max:
+        bge x8, x5, min     # if x5 >= x8 then make it new max
         mv x8, x5           # store the new max value in x8
+min:
         j loop
-
 done:
         la t0, sum_val      # load address to t0
         sout t0             # print t0
@@ -36,9 +36,9 @@ done:
         sout t1             # print newline
 
         la t0, max_val      # load address to t0
-        sout t0,            # print t0
+        sout t0             # print t0
 
-        dout x8             # print out x8 (max valut of inputs)
+        dout x8             # print out x8 (max value of inputs)
 
         halt                # end program
 
