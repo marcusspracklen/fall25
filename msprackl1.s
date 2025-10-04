@@ -7,8 +7,17 @@
 
 .text
 main:
-        addi x7, zero, 0                # zero sum counter
-        lui x8, 0x80000                 # set to smallest possible 32-bit value
+        addi x7, zero, 0     # zero sum counter
+
+        la t0, input_promt   # load address into t0
+        sout t0              # print t0
+
+        din x5               # grab input
+
+        beq x5, zero, done_2 # if x5 == zero then done_2
+
+        mv x8, x5            # make the first input the current max 
+        add x7, x5, x7       # add together the input value with the sum of all previous values
 
 loop:
         la t0, input_promt  # load adress of a string into t0
@@ -42,9 +51,17 @@ done:
 
         halt                # end program
 
+done_2:
+
+        la t0, no_input     # load address to t0
+        sout t0             # print t0
+
+        halt                # end program
+
 .data
 input_promt:         .asciz "Please input an integer!: "
 sum_val:             .asciz "The sum of all inputs is: "
 max_val:             .asciz "The max value was: "
 newline:             .asciz "\n"
+no_input:            .asciz "No input"
 buffer:              .zero 128       #128 byte input buffer
