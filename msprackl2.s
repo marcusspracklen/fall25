@@ -17,7 +17,7 @@ main:
     sout t0                 # print input prompt
     din a4                  # grab user input
 
-    beq a4, zero, done      # if user enters 0, end program
+    ble a4, zero, done      # if user enters anything less than or equal 0, end program
 
     addi a1, zero, 2        # initialize a1 to 2 (first prime)
     addi a5, zero, 0        # prime counter
