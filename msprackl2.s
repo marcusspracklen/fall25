@@ -19,7 +19,7 @@ main:
     din a4                  # grab user input
 
     addi a1, zero, 2        # intitilize a1 to 2 (first prime)
-    add a5, zero, zero      # prime counter
+    addi a5, zero, 0        # prime counter
 
 loop:
     jal ra, test_prime      # call test_prime function
@@ -43,23 +43,25 @@ prime:
 # -------------------------
 # function: test_prime
 # input: a1 = number to test
-# output: returns a4 as 1 or 0 (true or false)
+# output: returns a0 as 1 or 0 (true or false)
 # uses: a2 (divisor), a3 (remainder)
+#
+# N.B.
+# Here's a simple optimization I found, where the sqareroot of the number we are testing is the number     
+# we need to count the divisor up to, the reasoning behind this is that if a number isn't prime then it either has a whole sqareroot (which    
+# is then its factors and we will count to) or a number less than and one greater than that value of sqare root. Since we only need to find one factor 
+# we get to only look at numbers less than the square root, effectivley halfing the number of integers we need to check.
+# I have not included this however since in the assignment it states that brute force division is required and I was
+# unsure if this optimization violated the parameters of the assignment. I still wanted to inlcude the code since it's a 
+# nice optimization to have if there is any further use for this code, and I thought it was cool.
+# mul t1, a2, a2            # square t1 = a2
+# bgt t1, a1, is_prime      # if divisor^2 > number, its prime
 # -------------------------
 test_prime:
     addi a2, zero, 2          # make a2 = 2 (use for trial division by counting up and checking for whole numbers)
 
 prime_check_loop:
-    # mul t1, a2, a2            # square t1 = a2
-    # bgt t1, a1, is_prime      # if divisor^2 > number, its prime
-    # Here's a simple optimization I found, where the sqareroot of the number we are testing is the number 
-    # we need to count the divisor up to, the reasoning behind this is that if a number isn't prime then it either has a whole sqareroot (which
-    # is then its factors and we will count to) or a number less than and one greater than that value of sqare root. Since we only need to find one factor 
-    # we get to only look at numbers less than the square root, effectivley halfing the number of integers we need to check.
-    # I have not included this however since in the assignment it states that brute force division is required and I was
-    # unsure if this optimization violated the parameters of the assignment. I still wanted to inlcude the code since it's a 
-    # nice optimization to have if there is any further use for this code, and I thought it was cool. 
-
+    ble a1, a2, not_prime     # if a1 < a2, a0 = 0 (for safety to avoid an infinite loop)
     beq a2, a1, is_prime      # our divisor has reached the number being tested meaning without having a remainder of 0 meaning it's prime
     remu a3, a1, a2           # remainder = a1 % a2
     beq a3, zero, not_prime   # if divisible its not a prime
