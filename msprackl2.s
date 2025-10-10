@@ -59,9 +59,9 @@ prime:
 # -------------------------
 test_prime:
     addi a2, zero, 2          # make a2 = 2 (use for trial division by counting up and checking for whole numbers)
+    blt a1, a2, not_prime     # if a1 < a2, a0 = 0 (for safety to avoid an infinite loop)
 
 prime_check_loop:
-    ble a1, a2, not_prime     # if a1 < a2, a0 = 0 (for safety to avoid an infinite loop)
     beq a2, a1, is_prime      # our divisor has reached the number being tested meaning without having a remainder of 0 meaning it's prime
     remu a3, a1, a2           # remainder = a1 % a2
     beq a3, zero, not_prime   # if divisible its not a prime
