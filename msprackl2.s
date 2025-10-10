@@ -13,11 +13,10 @@
 
 .text
 main:
-    la t0, input_promt      # load t0 with input prompt
+    la t0, input_prompt      # load t0 with input prompt
     sout t0                 # print input prompt
     din a0                  # grab user input
 
-    addi a1, zero, 0        # primes found so far = 0
     addi a1, zero, 2        # intitilize a1 to 2 (first prime)
 
 loop:
@@ -25,7 +24,16 @@ loop:
 
     jal ra, test_prime      # call test_prime function
 
+    bne a4, zero, prime     # prime was found print the prime
+
     addi a1, a1, 1          # test the next number
+    j loop
+
+prime:
+    dout a1                 # print the prime we just found
+    addi a1, a1, 1          # test the next number
+    la t0, newline
+    sout t0                 # print newline
     j loop
 
 done:
@@ -34,11 +42,11 @@ done:
 # -------------------------
 # function: test_prime
 # input: a1 = number to test
-# output: if prime print it, then take away one from a0 (remaining number of primes)
+# output: returns a4 as 1 or 0 (true or false)
 # uses: a2 (divisor), a3 (remainder)
 # -------------------------
 test_prime:
-    addi a2, zero, 2          # make a3 = 2 (use for trial division by counting up and checking for whole numbers)
+    addi a2, zero, 2          # make a2 = 2 (use for trial division by counting up and checking for whole numbers)
 
 prime_check_loop:
     mul t1, a2, a2            # sqaure t1
@@ -51,15 +59,14 @@ prime_check_loop:
     j prime_check_loop
 
 is_prime:
-    dout a1                   # print the prime we found
-    la t0, newline
-    sout t0
     addi a0, a0, -1           # take away 1 from n
+    addi a4, zero, 1          # prime found is true
     ret
 
 not_prime:
+    addi a4, zero, 0          # prime found false
     ret                       # no prime found
 
 .data
-input_promt:    .asciz "Please enter the number of prime numbers you want found (please input a whole number greater than 0): "
-newline:        .asciz "\n"
+input_prompt:    .asciz "Please enter the number of prime numbers you want found (please input a whole number greater than 0): "
+newline:         .asciz "\n"
