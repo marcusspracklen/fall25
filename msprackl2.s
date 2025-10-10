@@ -4,7 +4,6 @@
 # Due 10/10/2025
 # Class: CS24
 
-
 # a0 = return value from function 
 # a1 = current number being tested 
 # a2 = divisor for checking for primes 
@@ -18,7 +17,9 @@ main:
     sout t0                 # print input prompt
     din a4                  # grab user input
 
-    addi a1, zero, 2        # intitilize a1 to 2 (first prime)
+    beq a4, zero, done      # if user enters 0, end program
+
+    addi a1, zero, 2        # initialize a1 to 2 (first prime)
     addi a5, zero, 0        # prime counter
 
 loop:
@@ -38,6 +39,8 @@ prime:
     addi a1, a1, 1          # test the next number
 
     bne a5, a4, loop        # check if we have found the number of primes equal to n (if not loop)
+
+done:
     halt                    # end program
 
 # -------------------------
@@ -48,9 +51,9 @@ prime:
 #
 # N.B.
 # Here's a simple optimization I found, where the sqareroot of the number we are testing is the number     
-# we need to count the divisor up to, the reasoning behind this is that if a number isn't prime then it either has a whole sqareroot (which    
-# is then its factors and we will count to) or a number less than and one greater than that value of sqare root. Since we only need to find one factor 
-# we get to only look at numbers less than the square root, effectivley halfing the number of integers we need to check.
+# we need to count the divisor up to, the reasoning behind this is that if a number isn't prime then it either has a whole square root (which    
+# is then its factors and we will count to) or a number less than and one greater than that value of square root. Since we only need to find one factor 
+# we get to only look at numbers less than the square root, effectively halfing the number of integers we need to check.
 # I have not included this however since in the assignment it states that brute force division is required and I was
 # unsure if this optimization violated the parameters of the assignment. I still wanted to inlcude the code since it's a 
 # nice optimization to have if there is any further use for this code, and I thought it was cool.
